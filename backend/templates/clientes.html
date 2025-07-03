@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de Clientes - Sistema de Glamping</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body>
+    <header>
+        <h1>Sistema de Gestión de Glamping</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Inicio</a></li>
+                <li><a href="{{ url_for('clientes') }}">Clientes</a></li>
+                <li><a href="{{ url_for('glampings') }}">Glampings</a></li>
+                <li><a href="{{ url_for('reservas') }}">Reservas</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Gestión de Clientes</h2>
+
+        <div class="form-container">
+            <h3>Nuevo Cliente</h3>
+            <form id="form-cliente" action="{{ url_for('guardar_cliente') }}" method="POST">
+                <input type="hidden" id="cliente-id" name="id" />
+
+                <div class="form-group">
+                    <label for="nombre">Nombre completo</label>
+                    <input type="text" id="nombre" name="nombre" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="telefono">Teléfono</label>
+                    <input type="tel" id="telefono" name="telefono" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="documento">Documento</label>
+                    <input type="text" id="documento" name="documento" required />
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" id="btn-guardar" class="success">Guardar</button>
+                    <button type="button" id="btn-cancelar" style="display: none;">Cancelar</button>
+                </div>
+            </form>
+        </div>
+
+        <h3>Lista de Clientes</h3>
+        <div class="table-container">
+            <table id="tabla-clientes">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th>Documento</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cliente in clientes %}
+                    <tr>
+                        <td>{{ cliente.id }}</td>
+                        <td>{{ cliente.nombre }}</td>
+                        <td>{{ cliente.email }}</td>
+                        <td>{{ cliente.telefono }}</td>
+                        <td>{{ cliente.documento }}</td>
+                        <td>
+                            <button class="editar-btn" data-id="{{ cliente.id }}">Editar</button>
+                            <a href="{{ url_for('eliminar_cliente', id=cliente.id) }}" class="eliminar-btn">Eliminar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Sistema de Gestión de Glamping. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/clientes.js') }}"></script>
+</body>
+</html>

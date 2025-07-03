@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestión de Reservas - Sistema de Glamping</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body>
+  <header>
+    <h1>Sistema de Gestión de Glamping</h1>
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('index') }}">Inicio</a></li>
+        <li><a href="{{ url_for('clientes') }}">Clientes</a></li>
+        <li><a href="{{ url_for('glampings') }}">Glampings</a></li>
+        <li><a href="{{ url_for('reservas') }}">Reservas</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h2>Gestión de Reservas</h2>
+
+    <div class="form-container">
+      <h3>Nueva Reserva</h3>
+      <form id="form-reserva" action="{{ url_for('guardar_reserva') }}" method="POST">
+        <input type="hidden" id="reserva-id" name="id" />
+
+        <div class="form-group">
+          <label for="cliente">Cliente</label>
+          <select id="cliente" name="clienteId" required>
+            <option value="">Seleccione un cliente</option>
+            {% for cliente in clientes %}
+            <option value="{{ cliente.id }}">{{ cliente.nombre }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="glamping">Glamping</label>
+          <select id="glamping" name="glampingId" required>
+            <option value="">Seleccione un glamping</option>
+            {% for glamping in glampings %}
+            <option value="{{ glamping.id }}">{{ glamping.nombre }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="fechaInicio">Fecha de inicio</label>
+          <input type="date" id="fechaInicio" name="fechaInicio" required />
+        </div>
+
+        <div class="form-group">
+          <label for="fechaFin">Fecha de fin</label>
+          <input type="date" id="fechaFin" name="fechaFin" required />
+        </div>
+
+        <div class="form-group">
+          <label for="totalPagado">Total pagado</label>
+          <input type="number" id="totalPagado" name="totalPagado" min="0" />
+        </div>
+
+        <div class="form-group">
+          <label for="estado">Estado</label>
+          <select id="estado" name="estado">
+            <option value="pendiente">Pendiente</option>
+            <option value="confirmada">Confirmada</option>
+            <option value="cancelada">Cancelada</option>
+          </select>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" id="btn-guardar" class="success">Guardar</button>
+          <button type="button" id="btn-cancelar" style="display: none;">Cancelar</button>
+        </div>
+      </form>
+    </div>
+
+    <h3>Lista de Reservas</h3>
+    <div class="table-container">
+      <table id="tabla-reservas">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Glamping</th>
+            <th>Fecha inicio</th>
+            <th>Fecha fin</th>
+            <th>Total pagado</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for reserva in reservas %}
+          <tr>
+            <td>{{ reserva.id }}</td>
+            <td data-clienteid="{{ reserva.cliente.id }}">{{ reserva.cliente.nombre }}</td>
+            <td data-glampingid="{{ reserva.glamping.id }}">{{ reserva.glamping.nombre }}</td>
+            <td>{{ reserva.fecha_inicio }}</td>
+            <td>{{ reserva.fecha_fin }}</td>
+            <td>{{ reserva.total_pagado }}</td>
+            <td>{{ reserva.estado }}</td>
+            <td>
+              <button class="editar-btn" data-id="{{ reserva.id }}">Editar</button>
+              <a href="{{ url_for('eliminar_reserva', id=reserva.id) }}" class="eliminar-btn">Eliminar</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Sistema de Gestión de Glamping. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/reservas.js') }}"></script>
+</body>
+</html>
