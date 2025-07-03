@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gestión de Clientes - Sistema de Glamping</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <header>
@@ -24,7 +24,7 @@
 
         <div class="form-container">
             <h3>Nuevo Cliente</h3>
-            <form id="form-cliente" action="{{ url_for('guardar_cliente') }}" method="POST">
+           <form id="form-cliente" action="{{ url_for('guardar_cliente') }}" method="POST">
                 <input type="hidden" id="cliente-id" name="id" />
 
                 <div class="form-group">
@@ -45,6 +45,10 @@
                 <div class="form-group">
                     <label for="documento">Documento</label>
                     <input type="text" id="documento" name="documento" required />
+                </div>
+
+                <div id="estado-edicion" style="display: none;" class="edit-warning">
+                    <p>📝 Editando cliente <span id="cliente-edicion-id"></span></p>
                 </div>
 
                 <div class="form-actions">

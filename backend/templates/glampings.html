@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gestión de Glampings - Sistema de Glamping</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <header>
@@ -47,10 +47,16 @@
                     <textarea id="descripcion" name="descripcion" required></textarea>
                 </div>
 
+
+                <div id="estado-edicion" style="display: none;" class="edit-warning">
+                    <p>📝 Editando glamping <span id="glamping-edicion-id"></span></p>
+                </div>
+
                 <div class="form-actions">
                     <button type="submit" id="btn-guardar" class="success">Guardar</button>
                     <button type="button" id="btn-cancelar" style="display: none;">Cancelar</button>
                 </div>
+
             </form>
         </div>
 
@@ -94,5 +100,6 @@
     </footer>
 
     <script src="{{ url_for('static', filename='js/glampings.js') }}"></script>
+
 </body>
 </html>

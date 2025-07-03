@@ -2,7 +2,11 @@ import json
 import os
 
 class Cliente:
-    _archivo_json = 'backend/data/clientes.json'
+    
+
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    _archivo_json = os.path.join(BASE_DIR, '../data/clientes.json')
+
 
     def __init__(self, id=None, nombre='', email='', telefono='', documento=''):
         self.id = id
@@ -16,24 +20,45 @@ class Cliente:
 
     @classmethod
     def from_dict(cls, data):
-        return cls(**data)
+        id = int(data.get("id")) if data.get("id") else None
+        return cls(
+            id=id,
+            nombre=data.get("nombre", ""),
+            email=data.get("email", ""),
+            telefono=data.get("telefono", ""),
+            documento=data.get("documento", "")
+        )
+
 
     def guardar(self):
         clientes = self.cargar_todos()
+        
         if not self.id:
             self.id = max([c['id'] for c in clientes], default=0) + 1
+        else:
+            self.id = int(self.id)  
+
         clientes = [c for c in clientes if c['id'] != self.id]
         clientes.append(self.to_dict())
+
         with open(self._archivo_json, 'w') as f:
             json.dump(clientes, f, indent=4)
         return True
 
+
     @classmethod
     def cargar_todos(cls):
         if not os.path.exists(cls._archivo_json):
-            return []
+            with open(cls._archivo_json, 'w') as f:
+                json.dump([], f)
+
         with open(cls._archivo_json, 'r') as f:
-            return json.load(f)
+            contenido = f.read().strip()
+            if not contenido:
+                return []
+            return json.loads(contenido)
+
+
 
     @classmethod
     def obtener_clientes(cls):

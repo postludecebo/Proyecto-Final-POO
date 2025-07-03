@@ -18,5 +18,49 @@ document.addEventListener("DOMContentLoaded", () => {
         if (e.target.classList.contains("eliminar-btn")) {
             window.location.href = `/eliminar_reserva/${e.target.dataset.id}`
         }
+   
     })
+const btnGuardar = document.getElementById("btn-guardar")
+const btnCancelar = document.getElementById("btn-cancelar")
+
+btnCancelar.addEventListener("click", () => {
+    form.reset()
+    idInput.value = ""
+    form.action = "/guardar_reserva"
+    btnGuardar.textContent = "Guardar"
+    btnCancelar.style.display = "none"
+})
+
+form.addEventListener("submit", e => {
+    e.preventDefault()
+
+    const datos = {
+        id: idInput.value,
+        clienteId: form.clienteId.value,
+        glampingId: form.glampingId.value,
+        fechaInicio: form.fechaInicio.value,
+        fechaFin: form.fechaFin.value,
+        totalPagado: form.totalPagado.value,
+        estado: form.estado.value,
+        action: form.action
+    }
+
+    console.log("[DEBUG RESERVA]", datos)
+
+    if (!datos.id) {
+        console.log("🆕 Se está creando nueva reserva")
+    } else {
+        console.log(`🛠️ Editando reserva #${datos.id}`)
+        btnGuardar.textContent = "Actualizar"
+        btnCancelar.style.display = "inline-block"
+    }
+
+    form.submit()
+})
+const estadoEdicion = document.getElementById("estado-edicion")
+const edicionIdSpan = document.getElementById("reserva-edicion-id")
+
+edicionIdSpan.textContent = `#${id}`
+estadoEdicion.style.display = "block"
+
 })

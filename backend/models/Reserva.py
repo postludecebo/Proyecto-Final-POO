@@ -2,7 +2,10 @@ import json, os
 from datetime import datetime
 
 class Reserva:
-    _archivo_json = 'backend/data/reservas.json'
+
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    _archivo_json = os.path.join(BASE_DIR, '../data/reservas.json')
+
 
     def __init__(self, id=None, cliente=None, glamping=None, fecha_inicio='', fecha_fin='', total_pagado=0.0, estado='pendiente'):
         self.id = id
@@ -26,15 +29,17 @@ class Reserva:
 
     @classmethod
     def from_dict(cls, data, cliente, glamping):
+        id = int(data.get('id')) if data.get('id') else None
         return cls(
-            id=data.get('id'),
+            id=id,
             cliente=cliente,
             glamping=glamping,
             fecha_inicio=data.get('fechaInicio'),
             fecha_fin=data.get('fechaFin'),
-            total_pagado=data.get('totalPagado'),
+            total_pagado=float(data.get('totalPagado', 0)),
             estado=data.get('estado')
         )
+
 
     def guardar(self):
         reservas = self.cargar_todos()
@@ -49,9 +54,15 @@ class Reserva:
     @classmethod
     def cargar_todos(cls):
         if not os.path.exists(cls._archivo_json):
-            return []
+            with open(cls._archivo_json, 'w') as f:
+                json.dump([], f)
+
         with open(cls._archivo_json, 'r') as f:
-            return json.load(f)
+            contenido = f.read().strip()
+            if not contenido:
+                return []
+            return json.loads(contenido)
+
 
     @classmethod
     def obtener_reservas(cls, clientes, glampings):
